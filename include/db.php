@@ -44,6 +44,20 @@ function updateBook($dbConnectionParam) {
         $sqlStatement = $dbConnectionParam->query("UPDATE `books` SET `title` = '$title', `author` = '$author', `year` = '$year' WHERE `id` = $editID");
         $sqlStatement->execute();
     }
+    elseif(isset($_POST['bookedBooks'])) {
+        foreach($_POST['bookedBooks'] as $book => $value) {
+            $data = [
+               'email' => $_POST['email'],
+               'book_id' => $value
+
+            ];
+
+            $sql = "INSERT INTO book_reservation (email, book_id) VALUES (:email, :book_id)"; 
+            $stmt = $dbConnectionParam->prepare($sql); 
+            $stmt->execute($data); 
+        }
+    }
+    
     else {
         // Keine weitere aktionen mit der Datenbank. 
     }

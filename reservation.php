@@ -12,24 +12,29 @@
 </head>
 <body>
 
-            
-                        <!--- HEADER --->
-                        
+            <a href= "/index.php" class="btn btn-primary">Go Back</a> <br>
+        
+            <form action="index.php" method="post">
+                <label for="email">E-Mail: </label>
+                <input type="email" name="email" placeholder="email" required> 
+                <input type="submit" value="Reserve Book" class="btn btn-primary"> <br>
 
-            <a href= "/reservation.php" class="btn btn-primary">Book Reservation</a>
             <table class="table table-success table-striped">
                    <!-- TABLE HEAD WIHT THE FIELD NAMES -->
                     <thead>
                         <tr class="table-dark">
                             <?php
                             
-                                require "./include/db.php";
+                                require_once "./include/db.php";
 
                                 // Alle Daten tu den Büchen aus der Datenbank auslesen (SELECT)
-                                // $sqlStatement = $dbConnection->query("SELECT * FROM `books`");
-                                $sqlStatement = $dbConnection->query("SELECT * FROM books WHERE id NOT IN (SELECT book_id FROM book_reservation)");
+                                $sqlStatement = $dbConnection->query("SELECT * FROM `books`");
+
+                                //Den Tabellenkopf vollständig ausgehen
                                 //https://www.php.net/manual/en...
                                 $columnCount = $sqlStatement->columnCount();
+
+                                echo "<th>Select</th>";
 
                                 for ($c = 0; $c < $columnCount; $c++) {
                                     //array mit Spalten-Metadaten holen
@@ -54,9 +59,13 @@
                             
                             // ->fetch() holt immer genau eine Tabellenzeile aus der Datenbank.  
                             while ($row = $sqlStatement->fetch(PDO::FETCH_ASSOC)) { //vertical row by row
-                                echo "<tr>";  
+                                echo "<tr>"; 
+                                
+                                $id = $row['id'];
+                                echo"<td><input type='checkbox' name='bookedBooks[]' value='$id'></td>";
 
                                 //Durch den Array hindurch die Angaben zu einem Buch in eine Tabellenzelle ausgeben.
+
                                 foreach ($row as $columnName => $value) {
                                     if ($columnName === 'title') {
                                         $id = $row['id'];
@@ -73,9 +82,10 @@
 
                         ?>
                     </tbody>
-            </table>    
+            </table>
+            </form>    
 
-                <!-- <a class="btn btn-primary"type="submit"  href='/createbook.php'>Create New Book</a> -->
+    
 
 </body>
 </html>
