@@ -28,7 +28,7 @@
                                 require_once "./include/db.php";
 
                                 // Alle Daten tu den Büchen aus der Datenbank auslesen (SELECT)
-                                $sqlStatement = $dbConnection->query("SELECT * FROM `books`");
+                                $sqlStatement = $dbConnection->query("SELECT * FROM `books` WHERE id NOT IN (SELECT book_id FROM book_reservation)");
 
                                 //Den Tabellenkopf vollständig ausgehen
                                 //https://www.php.net/manual/en...

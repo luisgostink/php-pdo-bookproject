@@ -12,12 +12,10 @@
 </head>
 <body>
 
-            
-                        <!--- HEADER --->
-                        
-
-            <a href= "/reservation.php" class="btn btn-primary">Book Reservation</a>
-            <a href= "/booked_books.php" class="btn btn-dark">Booked Books</a>
+            <a href= "/index.php" class="btn btn-primary">Go Back</a> <br>
+        
+            <form action="delete_reservation.php" method="post">
+                <input type="submit" value="Reserve Book" class="btn btn-primary"> <br>
 
             <table class="table table-success table-striped">
                    <!-- TABLE HEAD WIHT THE FIELD NAMES -->
@@ -25,12 +23,17 @@
                         <tr class="table-dark">
                             <?php
                             
-                                require "./include/db.php";
+                                require_once "./include/db.php";
 
                                 // Alle Daten tu den Büchen aus der Datenbank auslesen (SELECT)
-                                $sqlStatement = $dbConnection->query("SELECT * FROM `books`");
+                                $sqlStatement = $dbConnection->query("SELECT book_reservation.email, books.id, isbn, title,	author, year, category
+                                FROM books INNER JOIN book_reservation ON books.id = book_reservation.book_id");
+
+                                //Den Tabellenkopf vollständig ausgehen
                                 //https://www.php.net/manual/en...
                                 $columnCount = $sqlStatement->columnCount();
+
+                                echo "<th>Select</th>";
 
                                 for ($c = 0; $c < $columnCount; $c++) {
                                     //array mit Spalten-Metadaten holen
@@ -55,9 +58,13 @@
                             
                             // ->fetch() holt immer genau eine Tabellenzeile aus der Datenbank.  
                             while ($row = $sqlStatement->fetch(PDO::FETCH_ASSOC)) { //vertical row by row
-                                echo "<tr>";  
+                                echo "<tr>"; 
+                                
+                                $id = $row['id'];
+                                echo"<td><input type='checkbox' name='bookedBooks[]' value='$id'></td>";
 
                                 //Durch den Array hindurch die Angaben zu einem Buch in eine Tabellenzelle ausgeben.
+
                                 foreach ($row as $columnName => $value) {
                                     if ($columnName === 'title') {
                                         $id = $row['id'];
@@ -74,9 +81,11 @@
 
                         ?>
                     </tbody>
-            </table>    
+            </table>
+            <input type="submit" value="Delete" class="btn btn-secondary">
+            </form>    
 
-                <!-- <a class="btn btn-primary"type="submit"  href='/createbook.php'>Create New Book</a> -->
+    
 
 </body>
 </html>

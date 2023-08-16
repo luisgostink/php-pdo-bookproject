@@ -16,6 +16,8 @@
 
             require_once "./include/db.php";
 
+            $sqlStatement = $dbConnection->query("SELECT * FROM books WHERE id NOT IN (SELECT book_id FROM book_reservation)");
+
             if (isset($_POST['bookedBooks']))
             {
                 prettyPrint($_POST);
